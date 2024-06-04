@@ -45,8 +45,8 @@ export default function ProfilePage() {
 
   return (
     <Profile
-      name="my"
-      desc="welcome to your profile page"
+      name="My"
+      desc="Welcome to your profile page"
       data={posts}
       handleEdit={handleEdit}
       handleDelete={handleDelete}
