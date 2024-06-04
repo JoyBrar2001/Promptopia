@@ -35,7 +35,7 @@ export default function Feed() {
 
   const handleSearchChange = (e) => {
     clearTimeout(searchTimeout)
-    setSearchText(searchText)
+    setSearchText(e.target.value)
 
     setSearchTimeout(
       setTimeout(() => {
