@@ -2,7 +2,7 @@
 import { useEffect, useState,Suspense } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
-import Form from "@components/Form";
+import Form from "../../components/Form";
 
 const UpdatePrompt = () => {
   const router = useRouter();
