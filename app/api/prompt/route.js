@@ -9,6 +9,6 @@ export const GET = async () => {
     const prompts = await Prompt.find({}).populate('creator')
     return new Response(JSON.stringify(prompts), { status: 200 })
   } catch (error) {
-    return new Response(`Error occoured : ${error}`, { status: 500 })
+    return new Response(JSON.stringify(`Error occoured : ${error}`), { status: 500 })
   }
 }

@@ -36,7 +36,7 @@ export const PATCH = async (req, { params }) => {
     return new Response(JSON.stringify(updatedPrompt), { status: 200 });
   } catch (error) {
     console.error('Error updating prompt:', error);
-    return new Response(`Failed to edit the prompt, error: ${error}`, { status: 500 });
+    return new Response(JSON.stringify(`Failed to edit the prompt, error: ${error}`), { status: 500 });
   }
 };
 
@@ -46,8 +46,8 @@ export const DELETE = async (req, { params }) => {
 
     await Prompt.findByIdAndDelete(params.id)
 
-    return new Response("Prompt deleted successfully", { status: 200 })
+    return new Response(JSON.stringify("Prompt deleted successfully"), { status: 200 })
   } catch (error) {
-    return new Response(`Failed to delete the prompt, error : ${error}`, { status: 500 })
+    return new Response(JSON.stringify(`Failed to delete the prompt, error : ${error}`), { status: 500 })
   }
 }
