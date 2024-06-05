@@ -1,7 +1,8 @@
 "use client"
 
-import { useState, useEffect, Suspense } from "react"
+import { useState, useEffect } from "react"
 import PromptCard from "./PromptCard"
+import FeedSkeleton from "./FeedSkeleton"
 
 function PromptCardList({ data, handleTagClick }) {
   return (
@@ -22,6 +23,7 @@ export default function Feed() {
   const [searchTimeout, setSearchTimeout] = useState(null);
   const [searchedResults, setSearchedResults] = useState([]);
   const [allPosts, setAllPosts] = useState([])
+  const [loading, setLoading] = useState(true)
 
   const filterPrompts = (searchtext) => {
     const regex = new RegExp(searchtext, "i")
@@ -54,12 +56,22 @@ export default function Feed() {
 
   useEffect(() => {
     const fetchPosts = async () => {
-      const response = await fetch('/api/prompt')
-      const data = await response.json()
-      setAllPosts(data)
+      try {
+        const response = await fetch('/api/prompt')
+        const data = await response.json()
+        setAllPosts(data)
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoading(false)
+      }
     }
     fetchPosts()
   }, [])
+
+  if (loading) {
+    return <FeedSkeleton />
+  }
 
   return (
     <section className="feed">
@@ -73,19 +85,17 @@ export default function Feed() {
           className="search_input peer"
         />
       </form>
-      <Suspense>
-        {searchText ? (
-          <PromptCardList
-            data={searchedResults}
-            handleTagClick={handleTagClick}
-          />
-        ) : (
-          <PromptCardList
-            data={allPosts}
-            handleTagClick={handleTagClick}
-          />
-        )}
-      </Suspense >
+      {searchText ? (
+        <PromptCardList
+          data={searchedResults}
+          handleTagClick={handleTagClick}
+        />
+      ) : (
+        <PromptCardList
+          data={allPosts}
+          handleTagClick={handleTagClick}
+        />
+      )}
     </section>
   )
 }

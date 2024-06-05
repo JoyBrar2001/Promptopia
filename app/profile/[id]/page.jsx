@@ -1,6 +1,7 @@
 "use client"
 
 import Profile from "../../../components/Profile"
+import ProfileSkeleton from "../../../components/ProfileSkeleton"
 
 import { useEffect, useState } from "react"
 
@@ -8,6 +9,7 @@ export default function UserProfile({ params }) {
 
   const [user, setUser] = useState({})
   const [posts, setPosts] = useState([])
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -26,11 +28,22 @@ export default function UserProfile({ params }) {
       setPosts(data)
     }
 
-    if (params.id) {
-      fetchUser()
-      fetchPosts()
+    try {
+      setLoading(true)
+      if (params.id) {
+        fetchUser()
+        fetchPosts()
+      }
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setLoading(false)
     }
   }, [])
+
+  if(loading){
+    return <ProfileSkeleton />
+  }
 
   return (
     <Profile

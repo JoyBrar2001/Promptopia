@@ -1,6 +1,7 @@
 "use client"
 
 import Profile from "../../components/Profile";
+import ProfileSkeleton from "../../components/ProfileSkeleton";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -10,6 +11,7 @@ export default function ProfilePage() {
   const router = useRouter()
 
   const [posts, setPosts] = useState([])
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -19,7 +21,16 @@ export default function ProfilePage() {
       console.log(data);
     }
 
-    if (session?.user?.id) fetchPosts()
+    try {
+      setLoading(true)
+      if (session?.user?.id){
+        fetchPosts()
+      } 
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setLoading(false)
+    }
 
   }, [session?.user?.id])
 
@@ -29,18 +40,22 @@ export default function ProfilePage() {
 
   const handleDelete = async (post) => {
     const hasConfirmed = confirm("Are you sure you want to delete this prompt ? ")
-    if(hasConfirmed){
+    if (hasConfirmed) {
       try {
         await fetch(`/api/prompt/${post._id.toString()}`, {
           method: "DELETE"
         })
-        
+
         const filteredPosts = posts.filter(p => p._id !== post._id)
         setPosts(filteredPosts)
       } catch (error) {
         console.log(error)
       }
     }
+  }
+
+  if(loading){
+    return <ProfileSkeleton />
   }
 
   return (
