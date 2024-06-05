@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, Suspense } from "react"
 import PromptCard from "./PromptCard"
 
 function PromptCardList({ data, handleTagClick }) {
@@ -73,18 +73,19 @@ export default function Feed() {
           className="search_input peer"
         />
       </form>
-
-      {searchText ? (
-        <PromptCardList
-          data={searchedResults}
-          handleTagClick={handleTagClick}
-        />
-      ) : (
-        <PromptCardList
-          data={allPosts}
-          handleTagClick={handleTagClick}
-        />
-      )}
+      <Suspense>
+        {searchText ? (
+          <PromptCardList
+            data={searchedResults}
+            handleTagClick={handleTagClick}
+          />
+        ) : (
+          <PromptCardList
+            data={allPosts}
+            handleTagClick={handleTagClick}
+          />
+        )}
+      </Suspense >
     </section>
   )
 }

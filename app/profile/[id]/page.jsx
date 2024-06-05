@@ -34,7 +34,7 @@ export default function UserProfile({ params }) {
 
   return (
     <Profile
-      name={user?.username}
+      name={`${user?.username}'s`}
       desc={`Welcome to ${user?.username}'s profile`}
       data={posts}
       handleEdit
